@@ -45,7 +45,32 @@ public class UserDAO {
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w("SignupActivity", "createUserWithEmail:failure", task.getException());
-                            Toast.makeText(signUpActivity, "Authentication failed.",
+                            Toast.makeText(signUpActivity, "Authentication failed." + task.getException(),
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+    }
+
+    public void signInWithEmailAndPassword(String userEmail, String userPassword, SignUpActivity signUpActivity) {
+        FirebaseAuth m_auth = FirebaseAuth.getInstance();
+        m_auth.signInWithEmailAndPassword(userEmail, userPassword)
+                .addOnCompleteListener(signUpActivity, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                            Toast.makeText(signUpActivity, "User signed in.",
+                                    Toast.LENGTH_SHORT).show();
+                            //start purchase activity to display current user info
+                            Intent intent = new Intent(signUpActivity, PurchaseActivity.class);
+                            intent.putExtra("userEmail", userEmail);
+                            signUpActivity.startActivity(intent);
+                            signUpActivity.finish();
+                        } else {
+                           // If sign in fails, display a message to the user.
+                            Log.w("SignupActivity", "SignInUserWithEmail:failure", task.getException());
+                            Toast.makeText(signUpActivity, "Authentication failed." + task.getException(),
                                     Toast.LENGTH_SHORT).show();
                         }
                     }

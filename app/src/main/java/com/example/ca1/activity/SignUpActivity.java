@@ -49,11 +49,19 @@ public class SignUpActivity extends AppCompatActivity {
         editPassword.addTextChangedListener(tch);
 
 
-        Button button = findViewById(R.id.button);
-        button.setOnClickListener(new View.OnClickListener(){
+        Button signUpBtn = findViewById(R.id.sign_up_button);
+        signUpBtn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
                 signUp();
+            }
+        });
+
+        Button signInBtn = findViewById(R.id.sign_in_button);
+        signInBtn.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                signIn();
             }
         });
 
@@ -106,6 +114,25 @@ public class SignUpActivity extends AppCompatActivity {
         String userPassword = editPassword.getText().toString();
         UserDAO userDAO = new UserDAO();
         userDAO.createUserWithEmailAndPassword(userEmail, userPassword, this);
+    }
+
+    public void signIn() {
+        if (!validateEmail()) {
+            Toast.makeText(SignUpActivity.this, "Invalid Email: Must contain @ and no spaces", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        else if (!validatePassword()) {
+            Toast.makeText(SignUpActivity.this, "Invalid Password: Must be at least 6 characters, have no spaces and contain at least 1 digits", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        EditText editEmail = findViewById(R.id.edit_email);
+        String userEmail = editEmail.getText().toString();
+        EditText editPassword = findViewById(R.id.password_toggle);
+        String userPassword = editPassword.getText().toString();
+        UserDAO userDAO = new UserDAO();
+        userDAO.signInWithEmailAndPassword(userEmail, userPassword, this);
     }
 
 

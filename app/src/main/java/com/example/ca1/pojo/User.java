@@ -3,6 +3,7 @@ package com.example.ca1.pojo;
 import androidx.annotation.NonNull;
 
 public class User {
+    String id;
     String email;
     String password;
 
@@ -14,6 +15,14 @@ public class User {
     public User(String email, String password) {
         this.email = email;
         this.password = password;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public void setEmail(String email) {
