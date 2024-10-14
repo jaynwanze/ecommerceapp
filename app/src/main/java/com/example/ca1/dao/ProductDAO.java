@@ -6,6 +6,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 
 import com.example.ca1.activity.PurchaseActivity;
+import com.example.ca1.callback.Callback;
 import com.example.ca1.pojo.Product;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -22,12 +23,12 @@ import java.util.List;
 
 public class ProductDAO {
 
-    public void checkProductExistsAndAddToDb(String productName, int productQuantity, double productUnitPrice, PurchaseActivity purchaseActivity) {
+    public void checkProductExistsAndAddToDb(String productName, int productQuantity, double productUnitPrice, Callback callback) {
         FirebaseAuth m_auth = FirebaseAuth.getInstance();
         FirebaseUser m_user = m_auth.getCurrentUser();
         // check if user is logged in
         if (m_user == null) {
-            Toast.makeText(purchaseActivity, "User not logged in", Toast.LENGTH_SHORT).show();
+            callback.onError("User not logged in");
             return;
         }
         //check if product already exists
@@ -46,9 +47,9 @@ public class ProductDAO {
                 }
 
                 if (productExists) {
-                    Toast.makeText(purchaseActivity, "Product already exists: Cannot add to shopping list", Toast.LENGTH_SHORT).show();
+                    callback.onError("Product: " + productName + " - already exists in shopping list");
                 } else {
-                    addProductToDb(productName, productQuantity, productUnitPrice, purchaseActivity);
+                    addProductToDb(productName, productQuantity, productUnitPrice, callback);
                 }
             }
 
@@ -56,17 +57,18 @@ public class ProductDAO {
             public void onCancelled(@NonNull DatabaseError error) {
                 // Handle database error
                 Log.d("PurchaseActivity", "Database error: " + error.getMessage());
+                callback.onError("Database error: " + error.getMessage());
             }
         });
     }
 
-    public void addProductToDb(String name, int quantity, double price, PurchaseActivity purchaseActivity) {
+    public void addProductToDb(String name, int quantity, double price, Callback callback) {
         FirebaseAuth m_auth = FirebaseAuth.getInstance();
         FirebaseUser m_user = m_auth.getCurrentUser();
 
         // check if user is logged in
         if (m_user == null) {
-            Toast.makeText(purchaseActivity, "User not logged in", Toast.LENGTH_SHORT).show();
+            callback.onError("User not logged in");
             return;
         }
 
@@ -76,7 +78,7 @@ public class ProductDAO {
         // check if user is logged in
         if (key == null) {
             Log.d("PurchaseActivity", "Failed generate key for product");
-            Toast.makeText(purchaseActivity, "Failed to add to product to shopping list", Toast.LENGTH_SHORT).show();
+            callback.onError("Failed to add to product to shopping list");
             return;
         }
 
@@ -89,25 +91,25 @@ public class ProductDAO {
                     @Override
                     public void onSuccess(Void aVoid) {
                         Log.d("PurchaseActivity", "Write of product to database is successful");
-                        Toast.makeText(purchaseActivity, "Product added to shopping list", Toast.LENGTH_SHORT).show();
+                        callback.onSuccess("Product: " + name + " - added to shopping list");
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         Log.d("PurchaseActivity", "Write of product to database failed");
-                        Toast.makeText(purchaseActivity, "Unable to add product to shopping list", Toast.LENGTH_SHORT).show();
+                        callback.onError("Failed to add to product to shopping list");
                     }
                 });
     }
 
-    public void searchAndRemoveProduct(String productName, PurchaseActivity purchaseActivity) {
+    public void searchAndRemoveProduct(String productName, Callback callback) {
         FirebaseAuth m_auth = FirebaseAuth.getInstance();
         FirebaseUser m_user = m_auth.getCurrentUser();
 
         // check if user is logged in
         if (m_user == null) {
-            Toast.makeText(purchaseActivity, "User not logged in", Toast.LENGTH_SHORT).show();
+            callback.onError("User not logged in");
             return;
         }
         String userId = m_user.getUid();
@@ -121,29 +123,29 @@ public class ProductDAO {
                     Product productObj = productSnapshot.getValue(Product.class);
                     if (productObj != null && productObj.getName().equalsIgnoreCase(productName)) {
                         productsRef.child(productSnapshot.getKey()).removeValue(); // Remove by key
-                        Toast.makeText(purchaseActivity, "Product removed from shopping list", Toast.LENGTH_SHORT).show();
+                        callback.onSuccess("Product: " + productName + " - removed from shopping list");
                         return;
                     }
                 }
-                Toast.makeText(purchaseActivity, "Product not found", Toast.LENGTH_SHORT).show();
+                callback.onError("Product: " + productName + " - not found in shopping list");
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 Log.w("DBError", "Cancel Access DB");
-                Toast.makeText(purchaseActivity, "Unable to remove product by name", Toast.LENGTH_SHORT).show();
+                callback.onError("Unable to retrieve products");
             }
         });
     }
 
-    public void getAllProducts(PurchaseActivity purchaseActivity) {
+    public void getAllProducts(Callback callback) {
         FirebaseAuth m_auth = FirebaseAuth.getInstance();
         FirebaseUser m_user = m_auth.getCurrentUser();
 
 
         // check if user is logged in
         if (m_user == null) {
-            Toast.makeText(purchaseActivity, "User not logged in", Toast.LENGTH_SHORT).show();
+            callback.onError("User not logged in");
             return;
         }
         String userId = m_user.getUid();
@@ -153,21 +155,22 @@ public class ProductDAO {
                 productsRef.orderByChild("userId").equalTo(userId).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        List<Product> products = new ArrayList<>();
+                        List<Product> products = new ArrayList<Product>();
                         for (DataSnapshot productSnapshot : dataSnapshot.getChildren()) {
                             Product productObj = productSnapshot.getValue(Product.class);
                             if (productObj != null) {
                                 products.add(productObj);
                             }
                         }
-                        purchaseActivity.displayShoppingList(products);
+                        callback.onObjectsRetrieved(products);
                     }
                     @Override
                     public void onCancelled(@NonNull DatabaseError databaseError) {
                         Log.w("DBError", "Cancel Access DB");
-                        Toast.makeText(purchaseActivity, "Unable to remove product by name", Toast.LENGTH_SHORT).show();
+                        callback.onError("Unable to retrieve products");
                     }
                 });
+
     }
 
 }

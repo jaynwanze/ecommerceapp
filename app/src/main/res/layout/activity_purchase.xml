@@ -13,7 +13,7 @@
         android:layout_width="382dp"
         android:layout_height="100dp"
         android:text=""
-        android:textColor="@color/grey"
+        android:textColor="@color/dark_grey"
         android:textSize="20sp"
         app:layout_constraintBottom_toTopOf="@+id/search_product"
         app:layout_constraintEnd_toEndOf="parent"
@@ -48,7 +48,7 @@
         app:layout_constraintHorizontal_bias="0.01"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.838" />
+        app:layout_constraintVertical_bias="0.849" />
 
     <TextView
         android:id="@+id/product_quantity_label"
@@ -62,7 +62,7 @@
         app:layout_constraintHorizontal_bias="0.01"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.894" />
+        app:layout_constraintVertical_bias="0.903" />
 
     <TextView
         android:id="@+id/product_unit_price_label"

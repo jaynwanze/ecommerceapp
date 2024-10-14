@@ -43,4 +43,5 @@ dependencies {
     implementation(libs.firebase.database)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
+    implementation(libs.cardview)
 }
