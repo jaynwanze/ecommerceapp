@@ -1,6 +1,5 @@
 package com.example.ca1.activity;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -9,27 +8,18 @@ import android.widget.*;
 
 
 import androidx.activity.EdgeToEdge;
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-import androidx.credentials.CreateCredentialRequest;
 
 import com.example.ca1.R;
+import com.example.ca1.callback.Callback;
 import com.example.ca1.dao.UserDAO;
-import com.example.ca1.pojo.User;
 import com.example.ca1.textchange.TextChangeHandler;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
+
+
+import java.util.List;
 
 public class SignUpActivity extends AppCompatActivity {
 
@@ -44,6 +34,34 @@ public class SignUpActivity extends AppCompatActivity {
             return insets;
         });
 
+        Callback callback = new Callback() {
+            @Override
+            public void onSuccess(String message, Object... params) {
+                Toast.makeText(SignUpActivity.this, message, Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(SignUpActivity.this, PurchaseActivity.class);
+                //get email from params
+                if (params.length != 0) {
+                    String userEmail = (String) params[0];
+                    //pass email to purchase activity
+                    intent.putExtra("userEmail", userEmail);
+                }
+                //start purchase activity
+                SignUpActivity.this.startActivity(intent);
+                SignUpActivity.this.finish();
+
+            }
+
+            @Override
+            public void onError(String errorMessage) {
+                Toast.makeText(SignUpActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
+
+            }
+
+            @Override
+            public <T> void onObjectsRetrieved(List<T> products) {
+            }
+        };
+
         TextChangeHandler tch = new TextChangeHandler(this);
         EditText editPassword = findViewById(R.id.password_toggle);
         editPassword.addTextChangedListener(tch);
@@ -53,7 +71,7 @@ public class SignUpActivity extends AppCompatActivity {
         signUpBtn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                signUp();
+                signUp(callback);
             }
         });
 
@@ -61,11 +79,9 @@ public class SignUpActivity extends AppCompatActivity {
         signInBtn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                signIn();
+                signIn(callback);
             }
         });
-
-
     }
 
     public void validateWeakOrStrongPassword() {
@@ -97,7 +113,7 @@ public class SignUpActivity extends AppCompatActivity {
         return email.contains("@") && !email.contains(" ");
     }
 
-    public void signUp() {
+    public void signUp(Callback callback) {
         if (!validateEmail()) {
             Toast.makeText(SignUpActivity.this, "Invalid Email: Must contain @ and no spaces", Toast.LENGTH_LONG).show();
             return;
@@ -113,10 +129,10 @@ public class SignUpActivity extends AppCompatActivity {
         EditText editPassword = findViewById(R.id.password_toggle);
         String userPassword = editPassword.getText().toString();
         UserDAO userDAO = new UserDAO();
-        userDAO.createUserWithEmailAndPassword(userEmail, userPassword, this);
+        userDAO.createUserWithEmailAndPassword(userEmail, userPassword, callback);
     }
 
-    public void signIn() {
+    public void signIn(Callback callback) {
         if (!validateEmail()) {
             Toast.makeText(SignUpActivity.this, "Invalid Email: Must contain @ and no spaces", Toast.LENGTH_LONG).show();
             return;
@@ -132,7 +148,7 @@ public class SignUpActivity extends AppCompatActivity {
         EditText editPassword = findViewById(R.id.password_toggle);
         String userPassword = editPassword.getText().toString();
         UserDAO userDAO = new UserDAO();
-        userDAO.signInWithEmailAndPassword(userEmail, userPassword, this);
+        userDAO.signInWithEmailAndPassword(userEmail, userPassword, callback);
     }
 
 

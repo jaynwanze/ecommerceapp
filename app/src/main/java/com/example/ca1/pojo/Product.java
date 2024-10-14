@@ -7,16 +7,16 @@ public class Product {
     private String id;
     private String name;
     private int quantity;
-    private double price;
+    private double unitPrice;
     private String userId;
 
     public Product() {
     }
 
-    public Product(String name, int quantity, double price, String userId) {
+    public Product(String name, int quantity, double unitPrice, String userId) {
         this.name = name;
         this.quantity = quantity;
-        this.price = price;
+        this.unitPrice = unitPrice;
         this.userId = userId;
     }
 
@@ -36,12 +36,12 @@ public class Product {
         this.quantity = quantity;
     }
 
-    public double getPrice() {
-        return price;
+    public double getUnitPrice() {
+        return unitPrice;
     }
 
-    public void setPrice(double price) {
-        this.price = price;
+    public void setUnitPrice(double unitPrice) {
+        this.unitPrice = unitPrice;
     }
 
     public String getName() {
@@ -65,6 +65,6 @@ public class Product {
     public String toString() {
         return "\nProduct Name: " + name +
                 "\nProduct quantity: " + quantity +
-                "\nProduct Unit Price:" + price + "\n";
+                "\nProduct Unit Price:" + unitPrice + "\n";
     }
 }

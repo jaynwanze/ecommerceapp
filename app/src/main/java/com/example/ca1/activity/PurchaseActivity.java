@@ -3,11 +3,9 @@ package com.example.ca1.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.SpannableStringBuilder;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -18,6 +16,9 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.constraintlayout.utils.widget.MotionLabel;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 
 import com.example.ca1.R;
 import com.example.ca1.dao.ProductDAO;
@@ -35,6 +36,12 @@ public class PurchaseActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_purchase);
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.activity_purchase), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return insets;
+        });
+
         //get user email from intent
         Intent intent = getIntent();
         this.email = intent.getStringExtra("userEmail");
@@ -46,7 +53,7 @@ public class PurchaseActivity extends AppCompatActivity {
 
         Callback callback = new Callback() {
             @Override
-            public void onSuccess(String message) {
+            public void onSuccess(String message, Object... params) {
                 Toast.makeText(PurchaseActivity.this, message, Toast.LENGTH_SHORT).show();
             }
 

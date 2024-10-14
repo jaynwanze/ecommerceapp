@@ -3,7 +3,10 @@ package com.example.ca1.callback;
 import java.util.List;
 
 public interface Callback {
-    void onSuccess(String message); // For successful operations
-    void onError(String errorMessage); // For errors
-    <T> void onObjectsRetrieved(List<T> products); // For retrieving objects
+    // For successful operations
+    void onSuccess(String message, Object... params);
+    // For errors
+    void onError(String errorMessage);
+    // For retrieving objects
+    <T> void onObjectsRetrieved(List<T> products);
 }

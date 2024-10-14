@@ -5,7 +5,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
-import com.example.ca1.activity.PurchaseActivity;
 import com.example.ca1.callback.Callback;
 import com.example.ca1.pojo.Product;
 import com.google.android.gms.tasks.OnFailureListener;
