@@ -8,6 +8,7 @@ import android.widget.*;
 
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -34,6 +35,7 @@ public class SignUpActivity extends AppCompatActivity {
             return insets;
         });
 
+        //create callback
         Callback callback = new Callback() {
             @Override
             public void onSuccess(String message, Object... params) {
@@ -43,6 +45,7 @@ public class SignUpActivity extends AppCompatActivity {
                 if (params.length != 0) {
                     String userEmail = (String) params[0];
                     //pass email to purchase activity
+                    Log.d("SignUpActivity", userEmail);
                     intent.putExtra("userEmail", userEmail);
                 }
                 //start purchase activity
@@ -62,11 +65,13 @@ public class SignUpActivity extends AppCompatActivity {
             }
         };
 
+        //add text change listener to password field
         TextChangeHandler tch = new TextChangeHandler(this);
         EditText editPassword = findViewById(R.id.password_toggle);
         editPassword.addTextChangedListener(tch);
 
 
+        //add click listener to sign up button
         Button signUpBtn = findViewById(R.id.sign_up_button);
         signUpBtn.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -75,6 +80,7 @@ public class SignUpActivity extends AppCompatActivity {
             }
         });
 
+        //add click listener to sign in button
         Button signInBtn = findViewById(R.id.sign_in_button);
         signInBtn.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -84,6 +90,7 @@ public class SignUpActivity extends AppCompatActivity {
         });
     }
 
+    //check if password is strong enough
     public void validateWeakOrStrongPassword() {
         EditText editPassword = findViewById(R.id.password_toggle);
         if (editPassword.length() >= 6 && editPassword.length() < 8) {
@@ -100,12 +107,14 @@ public class SignUpActivity extends AppCompatActivity {
         }
     }
 
-    public boolean validatePassword() {
+    //check if password is valid
+    private boolean validatePassword() {
         EditText editPassword = findViewById(R.id.password_toggle);
             return editPassword.length() >= 6 && !editPassword.getText().toString().contains(" ") && editPassword.getText().toString().matches(".*\\d.*");
     }
 
-    public boolean validateEmail() {
+    //check if email is valid
+    private boolean validateEmail() {
         EditText editEmail = findViewById(R.id.edit_email);
         // Get the string and remove any extra spaces
         String email = editEmail.getText().toString().trim();
@@ -113,7 +122,8 @@ public class SignUpActivity extends AppCompatActivity {
         return email.contains("@") && !email.contains(" ");
     }
 
-    public void signUp(Callback callback) {
+    //sign up user
+    private void signUp(Callback callback) {
         if (!validateEmail()) {
             Toast.makeText(SignUpActivity.this, "Invalid Email: Must contain @ and no spaces", Toast.LENGTH_LONG).show();
             return;
@@ -132,7 +142,8 @@ public class SignUpActivity extends AppCompatActivity {
         userDAO.createUserWithEmailAndPassword(userEmail, userPassword, callback);
     }
 
-    public void signIn(Callback callback) {
+    //sign in user
+    private void signIn(Callback callback) {
         if (!validateEmail()) {
             Toast.makeText(SignUpActivity.this, "Invalid Email: Must contain @ and no spaces", Toast.LENGTH_LONG).show();
             return;
@@ -151,7 +162,11 @@ public class SignUpActivity extends AppCompatActivity {
         userDAO.signInWithEmailAndPassword(userEmail, userPassword, callback);
     }
 
-
+    @Override
+    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        Log.i("myActivity", "App is restoring");
+    }
 
     @Override
     protected void onStart() {

@@ -51,6 +51,7 @@ public class PurchaseActivity extends AppCompatActivity {
         SpannableStringBuilder spannableString = new SpannableStringBuilder(outputText);
         motionLabel.setText(spannableString);
 
+        //create callback
         Callback callback = new Callback() {
             @Override
             public void onSuccess(String message, Object... params) {
@@ -76,6 +77,7 @@ public class PurchaseActivity extends AppCompatActivity {
         };
 
 
+        //set up search view and on query text listener
         SearchView searchView = findViewById(R.id.search_product);
         searchView.setQueryHint("Search to remove product...");
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -144,7 +146,8 @@ public class PurchaseActivity extends AppCompatActivity {
         return true;
     }
 
-    public void displayShoppingList(List<Product> products) {
+    //display shopping list
+    private void displayShoppingList(List<Product> products) {
 
         if (products == null || products.isEmpty()) {
             Toast.makeText(this, "No products in shopping list", Toast.LENGTH_SHORT).show();
@@ -171,7 +174,32 @@ public class PurchaseActivity extends AppCompatActivity {
 
     }
 
-    public void addProductToShoppingList(Callback callback) {
+    //validation for inputs
+    private boolean isValidProductName(String productName) {
+        return productName != null && !productName.isEmpty() && productName.matches("[a-zA-Z0-9 ]+");
+    }
+
+    private boolean isValidProductQuantity(String productQuantity) {
+        try {
+            int quantity = Integer.parseInt(productQuantity);
+            return quantity > 0;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
+
+    private boolean isValidProductUnitPrice(String productUnitPrice) {
+        try {
+            double unitPrice = Double.parseDouble(productUnitPrice);
+            return unitPrice > 0;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
+
+
+    //add product to shopping list
+    private void addProductToShoppingList(Callback callback) {
         //extract product details from edit text
         EditText productNameEditText = findViewById(R.id.edit_product_name);
         EditText productQuantityEditText = findViewById(R.id.edit_product_quantity);
@@ -180,15 +208,40 @@ public class PurchaseActivity extends AppCompatActivity {
         String productQuantity= productQuantityEditText.getText().toString();
         String productUnitPrice = productUnitPriceEditText.getText().toString();
 
+        //check if fields are empty
+        if (productName.isEmpty() || productQuantity.isEmpty() || productUnitPrice.isEmpty()) {
+            Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // Trim strings before validation
+        productName = productName.trim();
+        productQuantity = productQuantity.trim();
+        productUnitPrice = productUnitPrice.trim();
+
+
+        if (!isValidProductName(productName)) {
+            Toast.makeText(this, "Invalid product name", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (!isValidProductQuantity(productQuantity)) {
+            Toast.makeText(this, "Invalid product quantity: Must be a positive integer", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (!isValidProductUnitPrice(productUnitPrice)) {
+            Toast.makeText(this, "Invalid product unit price: Must be a positive number", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         //add pass details to dao to add to db
         ProductDAO productDAO = new ProductDAO();
         productDAO.checkProductExistsAndAddToDb(productName, Integer.parseInt(productQuantity), Double.parseDouble(productUnitPrice), callback);
 
         //TODO:
         //VALDIATE INPUT - no psaces, letters, numbers,double
-        //add names to toasts
         //add state management
-        //clear search view after input
 
         //clear edit text fields
         productNameEditText.setText("");
@@ -196,26 +249,31 @@ public class PurchaseActivity extends AppCompatActivity {
         productUnitPriceEditText.setText("");
     }
 
-    public void getAllProducts(Callback callback) {
+    //get all products from db
+    private void getAllProducts(Callback callback) {
         ProductDAO productDAO = new ProductDAO();
         productDAO.getAllProducts(callback);
     }
 
-    public void searchAndRemoveProduct(String productName, Callback callback) {
+    // search and remove product from db
+    private void searchAndRemoveProduct(String productName, Callback callback) {
         ProductDAO productDAO = new ProductDAO();
         productDAO.searchAndRemoveProduct(productName, callback);
         SearchView searchView = findViewById(R.id.search_product);
         searchView.clearFocus();
     }
 
-    public void goBack() {
+    //go back to sign up activity
+    private void goBack() {
         Intent intent = new Intent(this, SignUpActivity.class);
         startActivity(intent);
         this.finish();
     }
 
-    public void goToCheckOut() {
+    //go to checkout activity
+    private void goToCheckOut() {
         Intent intent = new Intent(this, CheckoutActivity.class);
+        intent.putExtra("userEmail", this.email);
         startActivity(intent);
         this.finish();
     }

@@ -56,6 +56,7 @@ public class UserDAO {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d("SignupActivity", "SignInUserWithEmail:success");
                             callback.onSuccess("User signed in", userEmail);
+                            Log.d("UserDAO", userEmail);
                         } else {
                            // If sign in fails, display a message to the user.
                             Log.w("SignupActivity", "SignInUserWithEmail:failure", task.getException());

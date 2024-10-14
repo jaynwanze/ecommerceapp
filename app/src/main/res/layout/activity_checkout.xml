@@ -8,139 +8,206 @@
     android:id="@+id/activity_checkout">
 
 
-    <androidx.constraintlayout.utils.widget.MotionLabel
-        android:id="@+id/checkout_banner"
-        android:layout_width="382dp"
-        android:layout_height="100dp"
-        android:layout_marginTop="16dp"
-        android:background="@color/light_grey"
-        android:text="@string/checkout_banner_text"
-        android:textColor="@color/dark_grey"
-        android:textSize="40sp"
-        app:layout_constraintBottom_toTopOf="@+id/total_value"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.551"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.326" />
-
-    <TextView
-        android:id="@+id/total_value"
-        android:layout_width="151dp"
-        android:layout_height="48dp"
-        android:layout_marginTop="156dp"
+<TextView
+        android:id="@+id/empty_shopping_list_message"
+        android:layout_width="240dp"
+        android:layout_height="51dp"
+        android:background="@color/black"
         android:gravity="center"
-        android:text="@string/total_value"
+        android:text="@string/shopping_list_is_empty"
+        android:textColor="@color/white"
         android:textSize="18sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.15"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-
-
-    <TextView
-        android:id="@+id/number_of_items"
-        android:layout_width="155dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="44dp"
-        android:gravity="center"
-        android:text="@string/number_of_items"
-        android:textSize="18sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.152"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/total_value" />
-
-
-    <androidx.constraintlayout.utils.widget.MotionLabel
-        android:id="@+id/card_details_label"
-        android:layout_width="255dp"
-        android:layout_height="34dp"
-        android:layout_marginTop="48dp"
-        android:layout_marginBottom="16dp"
-        android:background="@color/light_grey"
-        android:gravity="center"
-        android:text="@string/payment_details"
-        android:textColor="@color/dark_grey"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toTopOf="@id/edit_card_number"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/number_of_items"
-
-        />
-
-    <TextView
-        android:id="@+id/card_number_label"
-        android:layout_width="125dp"
-        android:layout_height="35dp"
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="48dp"
-        android:gravity="center"
-        android:text="@string/card_number"
-        android:textSize="18sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/card_details_label" />
-
-    <TextView
-        android:id="@+id/card_expiry_label"
-        android:layout_width="124dp"
-        android:layout_height="34dp"
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="56dp"
-        android:gravity="center"
-        android:text="@string/card_expiry_date"
-        android:textSize="18sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/card_number_label" />
-
-    <EditText
-        android:id="@+id/edit_card_number"
-        android:layout_width="275dp"
-        android:layout_height="53dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="40dp"
-        android:hint="@string/enter_card_number"
-        app:layout_constraintStart_toEndOf="@+id/card_number_label"
-        app:layout_constraintTop_toBottomOf="@+id/card_details_label" />
-
-    <EditText
-        android:id="@+id/edit_card_expiry"
-        android:layout_width="274dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="40dp"
-        android:hint="@string/enter_card_expiry_date"
-        app:layout_constraintStart_toEndOf="@+id/card_expiry_label"
-        app:layout_constraintTop_toBottomOf="@+id/edit_card_number" />
-
-
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.188" />
 
     <Button
-        android:id="@+id/cancel_purchase_button"
+        android:id="@+id/homepage_button"
         android:layout_width="149dp"
         android:layout_height="76dp"
-        android:text="@string/cancel_purchase"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/confirm_purchase_button"
-        app:layout_constraintHorizontal_bias="0.311"
-        app:layout_constraintTop_toBottomOf="@+id/card_expiry_label"
-        app:layout_constraintVertical_bias="0.352" />
-
-    <Button
-        android:id="@+id/confirm_purchase_button"
-        android:layout_width="149dp"
-        android:layout_height="76dp"
-        android:layout_marginBottom="132dp"
-        android:text="@string/confirm_purchase"
+        android:layout_marginBottom="456dp"
+        android:text="@string/back_to_homepage"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.94"
-        app:layout_constraintStart_toEndOf="@+id/cancel_purchase_button"
-        app:layout_constraintTop_toTopOf="@+id/cancel_purchase_button"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintHorizontal_bias="0.501"
+        app:layout_constraintStart_toStartOf="parent" />
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/checkout_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.constraintlayout.utils.widget.MotionLabel
+            android:id="@+id/checkout_banner"
+            android:layout_width="382dp"
+            android:layout_height="100dp"
+            android:layout_marginTop="16dp"
+            android:background="@color/light_grey"
+            android:text="@string/checkout_banner_text"
+            android:textColor="@color/dark_grey"
+            android:textSize="40sp"
+            app:layout_constraintBottom_toTopOf="@+id/total_value_label"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <TextView
+            android:id="@+id/total_value_label"
+            android:layout_width="151dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="160dp"
+            android:gravity="center"
+            android:text="@string/total_value"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.086"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/number_of_items_label"
+            android:layout_width="155dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="44dp"
+            android:gravity="center"
+            android:text="@string/number_of_items"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.071"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/total_value_label" />
+
+        <TextView
+            android:id="@+id/total_value_output"
+            android:layout_width="155dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="44dp"
+            android:layout_marginEnd="28dp"
+            android:background="@color/light_grey"
+            android:gravity="center"
+            android:text=""
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toEndOf="@+id/total_value_label"
+            app:layout_constraintTop_toBottomOf="@+id/checkout_banner" />
+
+        <TextView
+            android:id="@+id/number_of_items_output"
+            android:layout_width="155dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="44dp"
+            android:layout_marginEnd="28dp"
+            android:background="@color/light_grey"
+            android:gravity="center"
+            android:text=""
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toEndOf="@+id/number_of_items_label"
+            app:layout_constraintTop_toBottomOf="@+id/total_value_output" />
+
+        <androidx.constraintlayout.utils.widget.MotionLabel
+            android:id="@+id/card_details_label"
+            android:layout_width="255dp"
+            android:layout_height="34dp"
+            android:layout_marginTop="48dp"
+            android:layout_marginBottom="16dp"
+            android:background="@color/light_grey"
+            android:gravity="center"
+            android:text="@string/payment_details"
+            android:textColor="@color/dark_grey"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toTopOf="@id/edit_card_number"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.502"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/number_of_items_label"
+
+            />
+
+        <TextView
+            android:id="@+id/card_number_label"
+            android:layout_width="125dp"
+            android:layout_height="35dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="40dp"
+            android:gravity="center"
+            android:text="@string/card_number"
+            android:textSize="18sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/card_details_label" />
+
+        <TextView
+            android:id="@+id/card_expiry_label"
+            android:layout_width="124dp"
+            android:layout_height="34dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="36dp"
+            android:gravity="center"
+            android:text="@string/card_expiry_date"
+            android:textSize="18sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/card_number_label" />
+
+
+        <EditText
+            android:id="@+id/edit_card_number"
+            android:layout_width="235dp"
+            android:layout_height="54dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="4dp"
+            android:hint="@string/enter_card_number"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/card_number_label"
+            app:layout_constraintTop_toBottomOf="@+id/card_details_label" />
+
+        <EditText
+            android:id="@+id/edit_card_expiry"
+            android:layout_width="235dp"
+            android:layout_height="49dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="4dp"
+            android:hint="@string/enter_card_expiry_date"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.571"
+            app:layout_constraintStart_toEndOf="@+id/card_expiry_label"
+            app:layout_constraintTop_toBottomOf="@+id/edit_card_number" />
+
+        <Button
+            android:id="@+id/cancel_purchase_button"
+            android:layout_width="149dp"
+            android:layout_height="76dp"
+            android:text="@string/cancel_purchase"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/confirm_purchase_button"
+            app:layout_constraintHorizontal_bias="0.311"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/card_expiry_label"
+            app:layout_constraintVertical_bias="0.468" />
+
+        <Button
+            android:id="@+id/confirm_purchase_button"
+            android:layout_width="149dp"
+            android:layout_height="76dp"
+            android:layout_marginBottom="132dp"
+            android:text="@string/confirm_purchase"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.94"
+            app:layout_constraintStart_toEndOf="@+id/cancel_purchase_button"
+            app:layout_constraintTop_toTopOf="@+id/cancel_purchase_button"
+            app:layout_constraintVertical_bias="0.0" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

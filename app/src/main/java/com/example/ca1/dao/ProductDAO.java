@@ -1,7 +1,6 @@
 package com.example.ca1.dao;
 
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
@@ -132,12 +131,45 @@ public class ProductDAO {
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 Log.w("DBError", "Cancel Access DB");
-                callback.onError("Unable to retrieve products");
+                callback.onError("Unable to retrieve products from database");
             }
         });
     }
 
     public void getAllProducts(Callback callback) {
+        FirebaseAuth m_auth = FirebaseAuth.getInstance();
+        FirebaseUser m_user = m_auth.getCurrentUser();
+
+        // check if user is logged in
+        if (m_user == null) {
+            callback.onError("User not logged in");
+            return;
+        }
+        String userId = m_user.getUid();
+
+        //gets products related to logged in user
+        DatabaseReference productsRef = FirebaseDatabase.getInstance().getReference("Products");
+        productsRef.orderByChild("userId").equalTo(userId).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                List<Product> products = new ArrayList<Product>();
+                for (DataSnapshot productSnapshot : dataSnapshot.getChildren()) {
+                    Product productObj = productSnapshot.getValue(Product.class);
+                    if (productObj != null) {
+                        products.add(productObj);
+                    }
+                }
+                callback.onObjectsRetrieved(products);
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.w("DBError", "Cancel Access DB");
+                callback.onError("Unable to retrieve products");
+            }
+        });
+    }
+
+    public void removeAllProducts(Callback callback) {
         FirebaseAuth m_auth = FirebaseAuth.getInstance();
         FirebaseUser m_user = m_auth.getCurrentUser();
 
@@ -151,24 +183,20 @@ public class ProductDAO {
 
         //gets products related to logged in user
         DatabaseReference productsRef = FirebaseDatabase.getInstance().getReference("Products");
-                productsRef.orderByChild("userId").equalTo(userId).addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        List<Product> products = new ArrayList<Product>();
-                        for (DataSnapshot productSnapshot : dataSnapshot.getChildren()) {
-                            Product productObj = productSnapshot.getValue(Product.class);
-                            if (productObj != null) {
-                                products.add(productObj);
-                            }
-                        }
-                        callback.onObjectsRetrieved(products);
-                    }
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-                        Log.w("DBError", "Cancel Access DB");
-                        callback.onError("Unable to retrieve products");
-                    }
-                });
+        productsRef.orderByChild("userId").equalTo(userId).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    dataSnapshot.getRef().removeValue();
+                }
+                callback.onSuccess("Removed all products");
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.w("DBError", "Cancel Access DB");
+                callback.onError("Unable to remove products");
+            }
+        });
 
     }
 
