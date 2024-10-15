@@ -186,8 +186,9 @@ public class ProductDAO {
         productsRef.orderByChild("userId").equalTo(userId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    dataSnapshot.getRef().removeValue();
+                for (DataSnapshot productSnapshot : dataSnapshot.getChildren()) {
+                    // Remove individual products relating to user
+                    productSnapshot.getRef().removeValue();
                 }
                 callback.onSuccess("Removed all products");
             }

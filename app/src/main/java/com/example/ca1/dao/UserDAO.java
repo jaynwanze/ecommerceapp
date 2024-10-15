@@ -36,7 +36,6 @@ public class UserDAO {
                                 // add user to db
                                 addUserToDb( userId, userEmail, userPassword , callback);
                             }
-                            callback.onSuccess("Authentication successful", userEmail);
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w("SignupActivity", "createUserWithEmail:failure", task.getException());
@@ -77,6 +76,7 @@ public class UserDAO {
                     @Override
                     public void onSuccess(Void aVoid) {
                         Log.d("SignupActivity", "Write of user to database is successful");
+                        callback.onSuccess("Authentication successful: User Signed Up", userEmail);
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
